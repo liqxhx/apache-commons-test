@@ -7,16 +7,24 @@
     <groupId>org.example</groupId>
     <artifactId>apache-commons-test</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>commons-pool2</module>
+    </modules>
 
     <packaging>pom</packaging>
 
     <properties>
-
+        <pool2.version>2.8.0</pool2.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-pool2 -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-pool2</artifactId>
+                <version>${pool2.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

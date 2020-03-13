@@ -1,0 +1,25 @@
+# IntelliJ project files
+.idea
+*.iml
+out
+target
+/logs
+.settings
+.project
+.classpath
+.factorypath
+rebel.xml
+rebel-remote.xml
+.rebel.xml.bak
+.rebel-remote.xml.bak
+*.log
+
+# OS generated files #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+*.db
+*.bin
+*.jar

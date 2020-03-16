@@ -30,9 +30,27 @@ public class ObjectPoolTests {
         connectionPool.setNumTestsPerEvictionRun(1);
 
         try {
-            Connection conn = connectionPool.borrowObject();
+            Thread t = new Thread(){
+                @Override
+                public void run() {
+                    Connection conn = null;
+                    try {
+                        conn = connectionPool.borrowObject();
+                        System.out.println(conn+" thread:" + Thread.currentThread().getName());
+                        connectionPool.returnObject(conn);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
 
+            t.start();
+            t.join();
+
+            Connection conn = connectionPool.borrowObject();
+            System.out.println(conn +" thread:" + Thread.currentThread().getName());
             connectionPool.returnObject(conn);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -62,6 +80,7 @@ class ConnectionFactory extends BasePooledObjectFactory<Connection> {
      */
     @Override
     public Connection create() throws Exception {
+        System.out.println("create");
         return new Connection();
     }
 
@@ -72,7 +91,8 @@ class ConnectionFactory extends BasePooledObjectFactory<Connection> {
      */
     @Override
     public PooledObject<Connection> wrap(Connection connection) {
-        return new DefaultPooledObject<Connection>(connection);;
+        System.out.println("wrap to PooledObject<Connection>");
+        return new DefaultPooledObject<Connection>(connection);
     }
 
     /**
@@ -82,6 +102,7 @@ class ConnectionFactory extends BasePooledObjectFactory<Connection> {
      */
     @Override
     public void destroyObject(PooledObject<Connection> p) throws Exception {
+        System.out.println("destroyObject");
         Optional.ofNullable(p.getObject()).ifPresent(conn -> conn.close());
     }
 
@@ -92,6 +113,7 @@ class ConnectionFactory extends BasePooledObjectFactory<Connection> {
      */
     @Override
     public boolean validateObject(PooledObject<Connection> p) {
+        System.out.println("validateObject");
         return p.getObject() == null ? false : p.getObject().ping();
     }
 
@@ -102,6 +124,7 @@ class ConnectionFactory extends BasePooledObjectFactory<Connection> {
      */
     @Override
     public void passivateObject(PooledObject<Connection> p) throws Exception {
+        System.out.println("passivateObject");
         Optional.ofNullable(p.getObject()).ifPresent(conn -> conn.clear());
     }
 }
